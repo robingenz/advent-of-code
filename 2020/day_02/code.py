@@ -29,5 +29,11 @@ def main():
     print(f"Part 1: {part1(file_input)}")
     print(f"Part 2: {part2(file_input)}")
 
+def test():
+    test_input = ["1-3 a: abcde", "1-3 b: cdefg", "2-9 c: ccccccccc"]
+    assert part1(test_input) == 2
+    assert part2(test_input) == 1
+
 if __name__ == "__main__":
+    test()
     main()
