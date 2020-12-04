@@ -2,6 +2,7 @@ def get_input() -> list:
     with open(f"{__file__.rstrip('code.py')}input.txt") as f:
         return f.readlines()
 
+
 def part1(vals: list) -> int:
     valid_pwd_num = 0
     for val in vals:
@@ -13,6 +14,7 @@ def part1(vals: list) -> int:
         valid_pwd_num += cnt >= lowest and cnt <= highest
     return valid_pwd_num
 
+
 def part2(vals: list) -> int:
     valid_pwd_num = 0
     for val in vals:
@@ -21,18 +23,21 @@ def part2(vals: list) -> int:
         pos1 = int(pos1)
         pos2 = int(pos2)
         valid_pwd_num += (pwd[pos1-1] == letter and pwd[pos2-1] !=
-                        letter) or (pwd[pos1-1] != letter and pwd[pos2-1] == letter)
+                          letter) or (pwd[pos1-1] != letter and pwd[pos2-1] == letter)
     return valid_pwd_num
+
 
 def main():
     file_input = get_input()
     print(f"Part 1: {part1(file_input)}")
     print(f"Part 2: {part2(file_input)}")
 
+
 def test():
     test_input = ["1-3 a: abcde", "1-3 b: cdefg", "2-9 c: ccccccccc"]
     assert part1(test_input) == 2
     assert part2(test_input) == 1
+
 
 if __name__ == "__main__":
     test()
