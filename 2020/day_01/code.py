@@ -1,5 +1,5 @@
 def get_input() -> list:
-    with open("input.txt") as f:
+    with open(f"{__file__.rstrip('code.py')}input.txt") as f:
         return [int(l) for l in f.readlines()]
 
 def part1(vals: list) -> int:
