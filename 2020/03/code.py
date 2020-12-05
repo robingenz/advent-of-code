@@ -1,6 +1,6 @@
 def get_input() -> list:
     with open(f"{__file__.rstrip('code.py')}input.txt") as f:
-        return [line[:-1] for line in f.readlines()]
+        return [l[:-1] for l in f.readlines()]
 
 
 def count_trees(vals: list, right: int, down: int) -> int:
