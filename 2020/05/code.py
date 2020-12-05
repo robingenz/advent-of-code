@@ -4,39 +4,19 @@ def get_input() -> list:
 
 
 def format_input(lines: list) -> list:
-    return [l.replace("F", "L")
-            .replace("B", "U").replace("R", "U") for l in lines]
-
-
-def calc(lowest: int, highest: int, val: str) -> int:
-    for char in val:
-        diff = highest - lowest
-        if char == "L":
-            highest -= round(diff / 2)
-        else:
-            lowest += round(diff / 2)
-    return lowest if char == "L" else highest
+    return [int(l.replace("F", "0").replace("L", "0")
+                .replace("B", "1").replace("R", "1"), 2) for l in lines]
 
 
 def part1(vals: list) -> int:
-    ids = []
-    for val in vals:
-        row = calc(0, 127, val[:7])
-        col = calc(0, 7, val[7:])
-        ids.append(row * 8 + col)
-    return max(ids)
+    return max(vals)
 
 
 def part2(vals: list) -> int:
-    ids = []
-    for val in vals:
-        row = calc(0, 127, val[:7])
-        col = calc(0, 7, val[7:])
-        ids.append(row * 8 + col)
-    ids.sort()
-    for idx, aaa in enumerate(ids[:-2]):
-        if not ids[idx+1] - aaa == 1:
-            return aaa + 1
+    vals.sort()
+    for idx, val in enumerate(vals[:-1]):
+        if not vals[idx+1] - val == 1:
+            return val + 1
 
 
 def main():
