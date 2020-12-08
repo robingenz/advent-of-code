@@ -4,15 +4,41 @@ def get_input() -> list:
 
 
 def format_input(lines: list) -> list:
-    return lines
+    instructions = []
+    for line in lines:
+        split = line.split(" ")
+        instructions.append([split[0], int(split[1])])
+    return instructions
+
+
+def run(instructions: list) -> tuple:
+    pointer, acc, size, history = 0, 0, len(instructions), []
+    while not pointer in history and pointer < size:
+        history.append(pointer)
+        if instructions[pointer][0] == "acc":
+            acc += instructions[pointer][1]
+        elif instructions[pointer][0] == "jmp":
+            pointer += instructions[pointer][1]
+            continue
+        pointer += 1
+    return pointer, acc
 
 
 def part1(vals: list) -> int:
-    return 0
+    return run(vals)[1]
 
 
 def part2(vals: list) -> int:
-    return 0
+    pointer, acc = run(vals)
+    i, size = 0, len(vals)
+    while pointer < size:
+        while vals[i][0] == "acc":
+            i += 1
+        vals[i][0] = "jmp" if vals[i][0] == "nop" else "nop"
+        pointer, acc = run(vals)
+        vals[i][0] = "jmp" if vals[i][0] == "nop" else "nop"
+        i += 1
+    return acc
 
 
 def main():
@@ -22,9 +48,19 @@ def main():
 
 
 def test():
-    test_input = format_input([])
-    assert part1(test_input) == 0
-    assert part1(test_input) == 0
+    test_input = format_input([
+        "nop +0",
+        "acc +1",
+        "jmp +4",
+        "acc +3",
+        "jmp -3",
+        "acc -99",
+        "acc +1",
+        "jmp -4",
+        "acc +6",
+    ])
+    assert part1(test_input) == 5
+    assert part2(test_input) == 8
 
 
 if __name__ == "__main__":
