@@ -1,10 +1,6 @@
 def get_input() -> list:
     with open(f"{__file__.rstrip('code.py')}input.txt") as f:
-        return [l[:-1] for l in f.readlines()]
-
-
-def format_input(lines: list) -> list:
-    return [int(l) for l in lines]
+        return [int(l[:-1]) for l in f.readlines()]
 
 
 def has_pair(sum_val: int, vals: list) -> bool:
@@ -39,34 +35,34 @@ def part2(vals: list, preamble: int) -> int:
 
 
 def main():
-    file_input = format_input(get_input())
+    file_input = get_input()
     print(f"Part 1: {part1(file_input, 25)}")
     print(f"Part 2: {part2(file_input, 25)}")
 
 
 def test():
-    test_input = format_input([
-        "35",
-        "20",
-        "15",
-        "25",
-        "47",
-        "40",
-        "62",
-        "55",
-        "65",
-        "95",
-        "102",
-        "117",
-        "150",
-        "182",
-        "127",
-        "219",
-        "299",
-        "277",
-        "309",
-        "576",
-    ])
+    test_input = [
+        35,
+        20,
+        15,
+        25,
+        47,
+        40,
+        62,
+        55,
+        65,
+        95,
+        102,
+        117,
+        150,
+        182,
+        127,
+        219,
+        299,
+        277,
+        309,
+        576,
+    ]
     assert part1(test_input, 5) == 127
     assert part2(test_input, 5) == 62
 
