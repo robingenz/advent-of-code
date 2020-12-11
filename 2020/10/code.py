@@ -1,32 +1,40 @@
 def get_input() -> list:
     with open(f"{__file__.rstrip('code.py')}input.txt") as f:
-        return [l[:-1] for l in f.readlines()]
+        return [int(l[:-1]) for l in f.readlines()]
 
 
-def format_input(lines: list) -> list:
-    return lines
+def complete_input(vals: list) -> list:
+    vals.append(0)
+    vals.append(max(vals) + 3)
+    vals.sort()
+    return vals
 
 
 def part1(vals: list) -> int:
-    return 0
+    diffs, size = [], len(vals)
+    for i in range(1, size):
+        diffs.append(vals[i] - vals[i-1])
+    return diffs.count(1) * diffs.count(3)
 
 
 def part2(vals: list) -> int:
-    return 0
+    results, size = [1, 0, 0], len(vals)
+    for i in range(1, size-1):
+        result = results[0]
+        if i - 2 >= 0 and vals[i] - vals[i-2] <= 3:
+            result = sum(results[0:2])
+        if i - 3 >= 0 and vals[i] - vals[i-3] <= 3:
+            result = sum(results)
+        results.insert(0, result)
+        results.pop()
+    return results[0]
 
 
 def main():
-    file_input = format_input(get_input())
+    file_input = complete_input(get_input())
     print(f"Part 1: {part1(file_input)}")
     print(f"Part 2: {part2(file_input)}")
 
 
-def test():
-    test_input = format_input([])
-    assert part1(test_input) == 0
-    assert part2(test_input) == 0
-
-
 if __name__ == "__main__":
-    test()
     main()
