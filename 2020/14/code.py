@@ -1,18 +1,43 @@
 def get_input() -> list:
     with open(f"{__file__.rstrip('code.py')}input.txt") as f:
-        return [l.strip() for l in f.readlines()]
+        return [l.strip().replace(" = ", " ").replace("mem[", "").replace("]", "") for l in f.readlines()]
 
 
 def format_input(lines: list) -> list:
-    return lines
+    instructions = []
+    for line in lines:
+        if line.startswith('mask'):
+            instructions.append([line.split()[1], []])
+            continue
+        instructions[-1][1].append([int(i) for i in line.split()])
+    return instructions
 
 
-def part1(vals: list) -> int:
-    return 0
+def part1(instructions: list) -> int:
+    results = dict()
+    for instr in instructions:
+        mask_and = int(instr[0].replace("X", "1"), 2)
+        mask_or = int(instr[0].replace("X", "0"), 2)
+        for mem in instr[1]:
+            results[mem[0]] = (mem[1] | mask_or) & mask_and
+    return sum(results.values())
 
 
-def part2(vals: list) -> int:
-    return 0
+def part2(instructions: list) -> int:
+    results = dict()
+    for instr in instructions:
+        mask_or = int(instr[0].replace("X", "0"), 2)
+        for mem in instr[1]:
+            addrs = [mem[0] | mask_or]
+            idxs = [i for i, val in enumerate(
+                reversed(instr[0])) if val == "X"]
+            for idx in idxs:
+                tmp = [addr | (1 << idx) for addr in addrs]
+                tmp += [addr & ~(1 << idx) for addr in addrs]
+                addrs = tmp
+            for addr in addrs:
+                results[addr] = mem[1]
+    return sum(results.values())
 
 
 def main():
@@ -21,12 +46,5 @@ def main():
     print(f"Part 2: {part2(file_input)}")
 
 
-def test():
-    test_input = format_input([])
-    assert part1(test_input) == 0
-    assert part2(test_input) == 0
-
-
 if __name__ == "__main__":
-    test()
     main()
