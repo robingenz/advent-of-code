@@ -16,25 +16,26 @@ def format_input(lines: list) -> dict:
 
 
 def simulate(state: dict, cycles: int, dimensions: int) -> int:
-    for key in list(state):
+    curr_state = dict()
+    for key, _ in state.items():
         new_key = list(key)
         for _ in range(2, dimensions):
             new_key.append(0)
-        state[tuple(new_key)] = state.pop(key)
+        curr_state[tuple(new_key)] = state[key]
     for _ in range(cycles):
-        for key in list(state):
+        for key in list(curr_state):
             for p in product([-1, 0, 1], repeat=dimensions):
                 i = tuple(map(operator.add, key, p))
-                if i not in state:
-                    state[i] = '.'
+                if i not in curr_state:
+                    curr_state[i] = '.'
         next_state = dict()
-        for key, val in state.items():
+        for key, val in curr_state.items():
             count = 0
             for p in product([-1, 0, 1], repeat=dimensions):
                 i = tuple(map(operator.add, key, p))
-                if key == i or i not in state:
+                if key == i or i not in curr_state:
                     continue
-                if state[i] == "#":
+                if curr_state[i] == "#":
                     count += 1
             if val == '#' and (count == 2 or count == 3):
                 next_state[key] = '#'
@@ -42,8 +43,8 @@ def simulate(state: dict, cycles: int, dimensions: int) -> int:
                 next_state[key] = '#'
             else:
                 next_state[key] = '.'
-        state = next_state
-    return len([val for _, val in state.items() if val == "#"])
+        curr_state = next_state
+    return len([val for _, val in curr_state.items() if val == "#"])
 
 
 def part1(state: dict) -> int:
@@ -55,8 +56,9 @@ def part2(state: dict) -> int:
 
 
 def main():
-    print(f"Part 1: {part1(format_input(get_input()))}")
-    print(f"Part 2: {part2(format_input(get_input()))}")
+    file_input = format_input(get_input())
+    print(f"Part 1: {part1(file_input)}")
+    print(f"Part 2: {part2(file_input)}")
 
 
 if __name__ == "__main__":
