@@ -3,7 +3,7 @@ def get_input() -> list:
         return [l.strip().replace(" = ", " ").replace("mem[", "").replace("]", "") for l in f.readlines()]
 
 
-def format_input(lines: list) -> list:
+def parse_input(lines: list) -> list:
     instructions = []
     for line in lines:
         if line.startswith('mask'):
@@ -41,7 +41,7 @@ def part2(instructions: list) -> int:
 
 
 def main():
-    file_input = format_input(get_input())
+    file_input = parse_input(get_input())
     print(f"Part 1: {part1(file_input)}")
     print(f"Part 2: {part2(file_input)}")
 

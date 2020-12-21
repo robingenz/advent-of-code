@@ -3,7 +3,7 @@ def get_input() -> list:
         return [l[:-1] for l in f.readlines()]
 
 
-def format_input(lines: list) -> list:
+def parse_input(lines: list) -> list:
     return [int(l.replace("F", "0").replace("L", "0")
                 .replace("B", "1").replace("R", "1"), 2) for l in lines]
 
@@ -20,13 +20,13 @@ def part2(vals: list) -> int:
 
 
 def main():
-    file_input = format_input(get_input())
+    file_input = parse_input(get_input())
     print(f"Part 1: {part1(file_input)}")
     print(f"Part 2: {part2(file_input)}")
 
 
 def test():
-    test_input = format_input(["FBFBBFFRLR"])
+    test_input = parse_input(["FBFBBFFRLR"])
     assert part1(test_input) == 357
 
 

@@ -3,7 +3,7 @@ def get_input() -> list:
         return [l.strip() for l in f.readlines()]
 
 
-def format_input(lines: list) -> dict:
+def parse_input(lines: list) -> dict:
     obj = {
         "rules": dict(),
         "tickets": []
@@ -78,7 +78,7 @@ def part2(obj: dict) -> int:
 
 
 def main():
-    file_input = format_input(get_input())
+    file_input = parse_input(get_input())
     print(f"Part 1: {part1(file_input)}")
     print(f"Part 2: {part2(file_input)}")
 

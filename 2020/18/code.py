@@ -3,7 +3,7 @@ def get_input() -> list:
         return [l.strip().replace("(", "( ").replace(")", " )").split(" ") for l in f.readlines()]
 
 
-def format_input(lines: list) -> list:
+def parse_input(lines: list) -> list:
     for i, j in enumerate(lines):
         for x, y in enumerate(j):
             if y.isnumeric():
@@ -51,7 +51,7 @@ def part2(vals: list) -> int:
 
 
 def main():
-    file_input = format_input(get_input())
+    file_input = parse_input(get_input())
     print(f"Part 1: {part1(file_input)}")
     print(f"Part 2: {part2(file_input)}")
 

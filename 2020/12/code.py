@@ -3,7 +3,7 @@ def get_input() -> list:
         return [l.strip() for l in f.readlines()]
 
 
-def format_input(lines: list) -> list:
+def parse_input(lines: list) -> list:
     return lines
 
 
@@ -66,13 +66,13 @@ def part2(vals: list) -> int:
 
 
 def main():
-    file_input = format_input(get_input())
+    file_input = parse_input(get_input())
     print(f"Part 1: {part1(file_input)}")
     print(f"Part 2: {part2(file_input)}")
 
 
 def test():
-    test_input = format_input([
+    test_input = parse_input([
         "F10",
         "N3",
         "F7",
