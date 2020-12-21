@@ -3,15 +3,38 @@ def get_input() -> list:
         return [l.strip() for l in f.readlines()]
 
 
-def parse_input(lines: list) -> list:
-    return lines
+def parse_input(lines: list) -> dict:
+    tiles = dict()
+    last_tile_id = ""
+    for line in lines:
+        if ":" in line:
+            last_tile_id = line.replace("Tile ", "").replace(":", "")
+            tiles[last_tile_id] = []
+        else:
+            tiles[last_tile_id].append(line)
+    return tiles
 
 
-def part1(vals: list) -> int:
+def rotate(tile: dict, times: int) -> list:
+    return []
+
+
+def flip(tile: dict, dir: int) -> list:
+    return []
+
+
+def assemble(tiles: dict) -> dict:
+    assembled_tiles = []
+
+    return assembled_tiles
+
+
+def part1(tiles: dict) -> int:
+    assembled_tiles = assemble(tiles)
     return 0
 
 
-def part2(vals: list) -> int:
+def part2(tiles: list) -> int:
     return 0
 
 
