@@ -14,25 +14,21 @@ def parse_input(lines: list) -> list:
     return decks
 
 
-def part1(decks: list) -> int:
-    while len(decks[0]) > 0 and len(decks[1]) > 0:
-        print(decks[0][0], decks[1][0])
-        if decks[0][0] > decks[1][0]:
-            decks[0].append(decks[0][0])
-            decks[0].append(decks[1][0])
-            decks[0].pop(0)
-            decks[1].pop(0)
+def play_regular(decks: list) -> int:
+    deck1, deck2 = decks[0].copy(), decks[1].copy()
+    while deck1 and deck2:
+        card1, card2 = deck1.pop(0), deck2.pop(0)
+        if card1 > card2:
+            deck1.extend([card1, card2])
         else:
-            decks[1].append(decks[1][0])
-            decks[1].append(decks[0][0])
-            decks[0].pop(0)
-            decks[1].pop(0)
-    winner = 0 if len(decks[0]) > 0 else 1
-    decks[winner].reverse()
-    score = 0
-    for i in range(len(decks[winner])):
-        score += decks[winner][i] * (i + 1)
-    return score
+            deck2.extend([card2, card1])
+    winning_deck = deck1 if len(deck1) > 0 else deck2
+    winning_deck.reverse()
+    return sum([(winning_deck[i] * (i + 1)) for i in range(len(winning_deck))])
+
+
+def part1(decks: list) -> int:
+    return play_regular(decks)
 
 
 def part2(decks: list) -> int:
