@@ -14,6 +14,10 @@ def parse_input(lines: list) -> list:
     return decks
 
 
+def calc_score(deck: list) -> int:
+    return sum([j * (i + 1) for i, j in enumerate(reversed(deck))])
+
+
 def play_regular(decks: list) -> int:
     deck1, deck2 = decks[0].copy(), decks[1].copy()
     while deck1 and deck2:
@@ -23,8 +27,11 @@ def play_regular(decks: list) -> int:
         else:
             deck2.extend([card2, card1])
     winning_deck = deck1 if len(deck1) > 0 else deck2
-    winning_deck.reverse()
-    return sum([(winning_deck[i] * (i + 1)) for i in range(len(winning_deck))])
+    return calc_score(winning_deck)
+
+
+def play_recursive_combat(decks: list) -> int:
+    return 0
 
 
 def part1(decks: list) -> int:
