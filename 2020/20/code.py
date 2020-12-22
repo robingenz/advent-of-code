@@ -30,6 +30,12 @@ def get_borders(tile_data: list) -> dict:
     return borders
 
 
+def remove_borders(tile_data: list) -> list:
+    tile_data = tile_data[1:-1]
+    tile_data = [d[1:-1] for d in tile_data]
+    return tile_data
+
+
 def get_hashes(tiles: dict) -> dict:
     hashes = dict()
     for k, v in tiles.items():
@@ -149,10 +155,61 @@ def arrange_matches(tiles: dict, matches: dict) -> list:
     return result
 
 
-def assemble(tiles: dict) -> dict:
+def assemble(tiles: dict) -> list:
     hashes = get_hashes(tiles)
     matches = match_hashes(hashes)
     return arrange_matches(tiles, matches)
+
+
+def build_actual_image(assembled_tiles: list) -> list:
+    size = len(assembled_tiles)
+    data_without_border = list([None for _ in range(size)]
+                               for _ in range(size))
+    for row in range(size):
+        for col in range(size):
+            data_without_border[row][col] = remove_borders(
+                assembled_tiles[row][col]["data"])
+    tile_data_size = len(data_without_border[0][0])
+    image = list([""] * size * tile_data_size)
+    for row in range(len(image)):
+        for col in range(size):
+            image[row] += data_without_border[row //
+                                              tile_data_size][col][row % tile_data_size]
+    return image
+
+
+def get_monster_coords():
+    monster_pattern = [
+        '                  # ',
+        '#    ##    ##    ###',
+        ' #  #  #  #  #  #   '
+    ]
+    size_x = len(monster_pattern)
+    size_y = len(monster_pattern[0])
+    return [(x, y) for x in range(size_x) for y in range(size_y) if monster_pattern[x][y] == '#']
+
+
+def check_for_monster(x: int, y: int, image: list) -> bool:
+    size = len(image)
+    coords = get_monster_coords()
+    for coord in coords:
+        check_x, check_y = (x + coord[0], y + coord[1])
+        if check_x >= size or check_y >= size or image[check_x][check_y] != '1':
+            return False
+    return True
+
+
+def count_monsters(image: list) -> int:
+    monsters, size = 0, len(image)
+    image_transformations = get_tile_data_transformations(image)
+    for img in image_transformations:
+        for x in range(size - 3):
+            for y in range(size - 20):
+                if check_for_monster(x, y, img):
+                    monsters += 1
+        if monsters > 0:
+            break
+    return monsters
 
 
 def part1(tiles: dict) -> int:
@@ -164,7 +221,10 @@ def part1(tiles: dict) -> int:
 
 
 def part2(tiles: dict) -> int:
-    return 0
+    assembled_tiles = assemble(tiles)
+    image = build_actual_image(assembled_tiles)
+    count = count_monsters(image)
+    return sum([x.count("1") for x in image]) - (count * 15)
 
 
 def main():
