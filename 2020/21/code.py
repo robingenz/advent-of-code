@@ -31,7 +31,8 @@ def get_allergen_candidates(foods: list, allergens: set) -> dict:
     return allergen_candidates
 
 
-def map_allergen_to_ingredient(allergens: set, allergen_candidates: dict) -> dict:
+def map_allergen_to_ingredient(foods: list, allergens: set) -> dict:
+    allergen_candidates = get_allergen_candidates(foods, allergens)
     allergen_to_ingredient = dict()
     while len(allergen_to_ingredient) < len(allergens):
         for allergen, candidates in allergen_candidates.items():
@@ -44,24 +45,27 @@ def map_allergen_to_ingredient(allergens: set, allergen_candidates: dict) -> dic
     return allergen_to_ingredient
 
 
-def get_allergenic_ingredients(allergens: set, allergen_candidates: dict) -> set:
-    allergen_to_ingredient = map_allergen_to_ingredient(
-        allergens, allergen_candidates)
+def get_allergenic_ingredients(foods: list, allergens: set) -> set:
+    allergen_to_ingredient = map_allergen_to_ingredient(foods, allergens)
     return set(allergen_to_ingredient.values())
 
 
 def part1(foods: list) -> int:
     allergens = get_allergens(foods)
-    allergen_candidates = get_allergen_candidates(foods, allergens)
-    allergenic_ingredients = get_allergenic_ingredients(
-        allergens, allergen_candidates)
+    allergenic_ingredients = get_allergenic_ingredients(foods, allergens)
     ingredients = get_ingredients(foods)
     non_allergenic_ingredients = ingredients - allergenic_ingredients
     return len([y for x in foods for y in x["ingredients"] if y in non_allergenic_ingredients])
 
 
-def part2(foods: list) -> int:
-    return 0
+def part2(foods: list) -> str:
+    allergens = get_allergens(foods)
+    allergen_to_ingredient = map_allergen_to_ingredient(foods, allergens)
+    sorted_allergens = sorted(allergens)
+    my_list = []
+    for allergen in sorted_allergens:
+        my_list.append(allergen_to_ingredient[allergen])
+    return ",".join(my_list)
 
 
 def main():
