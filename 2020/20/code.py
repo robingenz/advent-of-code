@@ -161,7 +161,7 @@ def assemble(tiles: dict) -> list:
     return arrange_matches(tiles, matches)
 
 
-def build_actual_image(assembled_tiles: list) -> list:
+def build_image(assembled_tiles: list) -> list:
     size = len(assembled_tiles)
     data_without_border = list([None for _ in range(size)]
                                for _ in range(size))
@@ -222,7 +222,7 @@ def part1(tiles: dict) -> int:
 
 def part2(tiles: dict) -> int:
     assembled_tiles = assemble(tiles)
-    image = build_actual_image(assembled_tiles)
+    image = build_image(assembled_tiles)
     count = count_monsters(image)
     return sum([x.count("1") for x in image]) - (count * 15)
 
