@@ -3,49 +3,70 @@ def get_input() -> list:
         return f.read().strip()
 
 
-def get_next_cup_idx(cups: list, current_cup: int) -> int:
-    idx, size = cups.index(current_cup), len(cups)
-    return (idx + 1) % size
+def parse_input(line: str) -> list:
+    return list(map(int, line))
 
 
-def part1(num: str) -> int:
-    cups = [int(n) for n in list(num)]
+class Cup:
+    def __init__(self, value):
+        self.value = value
+        self.next = None
+
+
+def play(cups: list, moves: int) -> Cup:
+    size, cups_dict = len(cups), dict()
+    for i in range(size):
+        cups[i].next = cups[(i + 1) % size]
+        cups_dict[cups[i].value] = cups[i]
+    maximum, minimum = max(cups_dict.keys()), min(cups_dict.keys())
     current_cup = cups[0]
-    moves = 100
-    maximum, minimum = max(cups), min(cups)
     for _ in range(moves):
-        picked_up_cups = [cups.pop(get_next_cup_idx(
-            cups, current_cup)) for _ in range(3)]
-        destination_cup = current_cup - 1
-        if destination_cup < minimum:
-            destination_cup = maximum
-        while destination_cup in picked_up_cups:
-            destination_cup -= 1
-            if destination_cup < minimum:
-                destination_cup = maximum
-        destination_cup_idx = cups.index(destination_cup)
-        for removed_cup in reversed(picked_up_cups):
-            cups.insert(destination_cup_idx + 1, removed_cup)
-        current_cup = cups[get_next_cup_idx(cups, current_cup)]
-    result = cups[cups.index(1) + 1:]
-    result.extend(cups[:cups.index(1)])
-    return int("".join([str(c) for c in result]))
+        picked_up_cup = current_cup.next
+        current_cup.next = current_cup.next.next.next.next
+        destination_cup_value = current_cup.value
+        forbidden_values = [current_cup.value,
+                            picked_up_cup.value,
+                            picked_up_cup.next.value,
+                            picked_up_cup.next.next.value]
+        while destination_cup_value in forbidden_values:
+            destination_cup_value -= 1
+            if destination_cup_value < minimum:
+                destination_cup_value = maximum
+        destination_cup = cups_dict[destination_cup_value]
+        picked_up_cup.next.next.next = destination_cup.next
+        destination_cup.next = picked_up_cup
+        current_cup = current_cup.next
+    return cups_dict[1]
 
 
-def part2(input: str) -> int:
-    return 0
+def part1(val: int) -> int:
+    cups, cups_size = [Cup(n) for n in val], len(val)
+    cup_1 = play(cups, 100)
+    result, next_cup = "", cup_1.next
+    for _ in range(cups_size - 1):
+        result += str(next_cup.value)
+        next_cup = next_cup.next
+    return int(result)
+
+
+def part2(val: int) -> int:
+    cups = [Cup(n) for n in range(1, 1000000 + 1)]
+    for k, v in enumerate(val):
+        cups[k] = Cup(v)
+    cup_1 = play(cups, 10000000)
+    return cup_1.next.value * cup_1.next.next.value
 
 
 def main():
-    file_input = get_input()
+    file_input = parse_input(get_input())
     print(f"Part 1: {part1(file_input)}")
     print(f"Part 2: {part2(file_input)}")
 
 
 def test():
-    test_input = "389125467"
+    test_input = parse_input("389125467")
     assert part1(test_input) == 67384529
-    assert part2(test_input) == 0
+    assert part2(test_input) == 149245887792
 
 
 if __name__ == "__main__":
