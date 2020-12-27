@@ -26,13 +26,13 @@ def get_directions() -> dict:
 def run(instructions: list) -> dict:
     dirs = get_directions()
     tiles = {
-        (0, 0): True
+        (0, 0): False
     }
     for instruction in instructions:
         coords = (0, 0)
         for item in instruction:
             coords = (coords[0] + dirs[item][0], coords[1] + dirs[item][1])
-        tiles[coords] = not tiles[coords] if coords in tiles else False
+        tiles[coords] = not tiles[coords] if coords in tiles else True
     return tiles
 
 
@@ -40,12 +40,12 @@ def get_neighbours(tile: tuple, tiles: dict) -> dict:
     neighbours, dirs = dict(), get_directions()
     for v in dirs.values():
         coord = (tile[0] + v[0], tile[1] + v[1])
-        neighbours[coord] = tiles[coord] if coord in tiles else True
+        neighbours[coord] = tiles[coord] if coord in tiles else False
     return neighbours
 
 
 def count_black_tiles(tiles) -> int:
-    return len([v for v in tiles.values() if v == False])
+    return len([v for v in tiles.values() if v == True])
 
 
 def part1(instructions: list) -> int:
@@ -64,11 +64,11 @@ def part2(instructions: list) -> int:
         for k, v in tiles.items():
             neighbours = get_neighbours(k, tiles)
             black_neighbours_size = len(
-                [n for n in neighbours.values() if n == False])
-            if v == False and (black_neighbours_size == 0 or black_neighbours_size > 2):
-                updates[k] = True
-            elif v == True and black_neighbours_size == 2:
+                [n for n in neighbours.values() if n == True])
+            if v == True and (black_neighbours_size == 0 or black_neighbours_size > 2):
                 updates[k] = False
+            elif v == False and black_neighbours_size == 2:
+                updates[k] = True
         tiles.update(updates)
     return count_black_tiles(tiles)
 
