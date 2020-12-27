@@ -3,15 +3,33 @@ def get_input() -> list:
         return [l.strip() for l in f.readlines()]
 
 
-def parse_input(lines: list) -> list:
-    return lines
+def parse_input(lines: list) -> dict:
+    return {
+        "card": int(lines[0]),
+        "door": int(lines[1]),
+    }
 
 
-def part1(vals: list) -> int:
-    return 0
+def transform(val: int, subj_num: int) -> int:
+    return (val * subj_num) % 20201227
 
 
-def part2(vals: list) -> int:
+def find_encryption_key(keys: dict, subj_num: int) -> int:
+    loop_size, val = 0, 1
+    while val != keys["card"]:
+        val = transform(val, subj_num)
+        loop_size += 1
+    val = 1
+    for _ in range(loop_size):
+        val = transform(val, keys["door"])
+    return val
+
+
+def part1(keys: dict) -> int:
+    return find_encryption_key(keys, 7)
+
+
+def part2(keys: dict) -> int:
     return 0
 
 
@@ -21,12 +39,5 @@ def main():
     print(f"Part 2: {part2(file_input)}")
 
 
-def test():
-    test_input = parse_input([])
-    assert part1(test_input) == 0
-    assert part2(test_input) == 0
-
-
 if __name__ == "__main__":
-    test()
     main()
