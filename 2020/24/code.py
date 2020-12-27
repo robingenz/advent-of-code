@@ -1,4 +1,3 @@
-
 def get_input() -> list:
     with open(f"{__file__.rstrip('code.py')}input.txt") as f:
         return [l.strip() for l in f.readlines()]
@@ -45,9 +44,13 @@ def get_neighbours(tile: tuple, tiles: dict) -> dict:
     return neighbours
 
 
+def count_black_tiles(tiles) -> int:
+    return len([v for v in tiles.values() if v == False])
+
+
 def part1(instructions: list) -> int:
     tiles = run(instructions)
-    return len([v for v in tiles.values() if v == False])
+    return count_black_tiles(tiles)
 
 
 def part2(instructions: list) -> int:
@@ -67,7 +70,7 @@ def part2(instructions: list) -> int:
             elif v == True and black_neighbours_size == 2:
                 updates[k] = False
         tiles.update(updates)
-    return len([v for v in tiles.values() if v == False])
+    return count_black_tiles(tiles)
 
 
 def main():
