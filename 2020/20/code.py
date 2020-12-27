@@ -178,7 +178,7 @@ def build_image(assembled_tiles: list) -> list:
     return image
 
 
-def get_monster_coords():
+def get_monster_coords() -> list:
     monster_pattern = [
         '                  # ',
         '#    ##    ##    ###',
@@ -189,10 +189,9 @@ def get_monster_coords():
     return [(x, y) for x in range(size_x) for y in range(size_y) if monster_pattern[x][y] == '#']
 
 
-def check_for_monster(x: int, y: int, image: list) -> bool:
+def check_for_monster(x: int, y: int, image: list, monster_coords: list) -> bool:
     size = len(image)
-    coords = get_monster_coords()
-    for coord in coords:
+    for coord in monster_coords:
         check_x, check_y = (x + coord[0], y + coord[1])
         if check_x >= size or check_y >= size or image[check_x][check_y] != '1':
             return False
@@ -201,11 +200,12 @@ def check_for_monster(x: int, y: int, image: list) -> bool:
 
 def count_monsters(image: list) -> int:
     monsters, size = 0, len(image)
+    monster_coords = get_monster_coords()
     image_transformations = get_tile_data_transformations(image)
     for img in image_transformations:
         for x in range(size - 3):
             for y in range(size - 20):
-                if check_for_monster(x, y, img):
+                if check_for_monster(x, y, img, monster_coords):
                     monsters += 1
         if monsters > 0:
             break
