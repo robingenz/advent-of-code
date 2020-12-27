@@ -57,6 +57,9 @@ def part2(instructions: list) -> int:
         for k, v in tiles.items():
             neighbours = get_neighbours(k, tiles)
             updates.update(neighbours)
+        tiles.update(updates)
+        for k, v in tiles.items():
+            neighbours = get_neighbours(k, tiles)
             black_neighbours_size = len(
                 [n for n in neighbours.values() if n == False])
             if v == False and (black_neighbours_size == 0 or black_neighbours_size > 2):
