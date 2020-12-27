@@ -1,5 +1,4 @@
 from itertools import product
-import operator
 
 
 def get_input() -> list:
@@ -25,14 +24,14 @@ def simulate(state: dict, cycles: int, dimensions: int) -> int:
     for _ in range(cycles):
         for key in list(curr_state):
             for p in product([-1, 0, 1], repeat=dimensions):
-                i = tuple(map(operator.add, key, p))
+                i = tuple(map(sum, zip(key, p)))
                 if i not in curr_state:
                     curr_state[i] = '.'
         next_state = dict()
         for key, val in curr_state.items():
             count = 0
             for p in product([-1, 0, 1], repeat=dimensions):
-                i = tuple(map(operator.add, key, p))
+                i = tuple(map(sum, zip(key, p)))
                 if key == i or i not in curr_state:
                     continue
                 if curr_state[i] == "#":
